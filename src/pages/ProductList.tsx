@@ -1,7 +1,15 @@
-import { Table, Button } from 'antd';
+import { Table, Button, Space } from 'antd';
 import { useGetProductsQuery } from '../features/products/productsApi';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  thumbnail: string;
+}
 
 const ProductList = () => {
   const [page, setPage] = useState(1);
@@ -18,43 +26,56 @@ const ProductList = () => {
     {
       title: 'Thumbnail',
       dataIndex: 'thumbnail',
-      render: (text: string) => <img src={text} alt="thumbnail" className="w-16 h-16 object-cover" />,
+      key: 'thumbnail',
+      render: (thumbnail: string) => (
+        <img src={thumbnail} alt="Thumbnail" className="w-16 h-16 object-cover rounded" />
+      ),
     },
     {
       title: 'Title',
       dataIndex: 'title',
+      key: 'title',
     },
     {
       title: 'Price',
       dataIndex: 'price',
+      key: 'price',
       render: (price: number) => `$${price}`,
     },
     {
-      title: 'Action',
-      render: (_: any, record: any) => (
-        <Button type="primary" onClick={() => navigate(`/products/${record.id}`)}>
-          View Details
-        </Button>
+      title: 'Actions',
+      key: 'actions',
+      render: (_: unknown, record: Product) => (
+        <Space>
+          <Button type="primary" onClick={() => navigate(`/products/${record.id}`)}>
+            View
+          </Button>
+          <Button onClick={() => navigate(`/products/${record.id}/edit`)}>
+            Edit
+          </Button>
+        </Space>
       ),
     },
   ];
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Product List</h1>
-      <Table
-        columns={columns}
-        dataSource={data?.products}
-        loading={isLoading}
-        pagination={{
-          current: page,
-          pageSize,
-          total: data?.total,
-          onChange: (p) => setPage(p),
-        }}
-        rowKey="id"
-        bordered
-      />
+      <h1 className="text-2xl font-bold mb-6 text-center">Product List</h1>
+      <div className="bg-white p-4 rounded shadow">
+        <Table
+          columns={columns}
+          dataSource={data?.products}
+          loading={isLoading}
+          pagination={{
+            current: page,
+            pageSize,
+            total: data?.total,
+            onChange: (p) => setPage(p),
+          }}
+          rowKey="id"
+          bordered
+        />
+      </div>
     </div>
   );
 };

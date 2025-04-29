@@ -6,6 +6,8 @@ interface Product {
   description: string;
   price: number;
   thumbnail: string;
+  category: string;
+  reviews?: string[]; // added reviews field
 }
 
 interface ProductsResponse {
@@ -25,7 +27,22 @@ export const productsApi = createApi({
     getProductById: builder.query<Product, number>({
       query: (id) => `products/${id}`,
     }),
+    getCategories: builder.query<string[], void>({
+      query: () => 'products/categories',
+    }),
+    updateProduct: builder.mutation<Product, { id: number; body: Partial<Product> }>({
+      query: ({ id, body }) => ({
+        url: `products/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetProductsQuery, useGetProductByIdQuery } = productsApi;
+export const { 
+  useGetProductsQuery, 
+  useGetProductByIdQuery, 
+  useGetCategoriesQuery, 
+  useUpdateProductMutation 
+} = productsApi;
