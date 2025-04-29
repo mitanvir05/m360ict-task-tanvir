@@ -1,10 +1,15 @@
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProductList from './pages/ProductList';
+import ProductDetail from './pages/ProductDetail';
 
 function App() {
   return (
-    <>
-      <div className="bg-amber-600">Hlw from task</div>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<ProductList />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
+      </Routes>
+    </Router>
   );
 }
 
