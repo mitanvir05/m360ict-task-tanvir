@@ -15,10 +15,13 @@ const EditProduct = () => {
 
   useEffect(() => {
     if (productData) {
-      form.setFieldsValue({
-        ...productData,
-        reviews: productData.reviews || [],
-      });
+        form.setFieldsValue({
+            ...productData,
+            reviews: (productData.reviews || []).map((r) =>
+              typeof r === 'object' && r !== null ? r.comment || '' : r
+            ),
+          });
+          
     }
   }, [productData, form]);
 
